@@ -1,0 +1,18 @@
+name: my-wp-blocks-site
+type: wordpress
+docroot: web
+php_version: "8.3"
+webserver_type: nginx-fpm
+xdebug_enabled: false
+database:
+    type: mariadb
+    version: "10.11"
+use_dns_when_possible: true
+composer_version: "2"
+corepack_enable: false
+
+hooks:
+    post-start:
+        - exec: "test -f /var/www/html/web/wp-includes/version.php || wp core download --path=/var/www/html/web"
+        - exec: "wp core is-installed --path=/var/www/html/web 2>/dev/null || wp core install --path=/var/www/html/web --url=${DDEV_PRIMARY_URL} --title='My Site' --admin_user=admin --admin_password=admin --admin_email=dev@example.com --skip-email"
+        - exec: "wp plugin is-active wordpress-blocks --path=/var/www/html/web 2>/dev/null || wp plugin activate wordpress-blocks --path=/var/www/html/web 2>/dev/null || true"

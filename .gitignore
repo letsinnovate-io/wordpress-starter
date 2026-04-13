@@ -1,0 +1,43 @@
+# Dependencies
+/vendor/
+
+# Environment
+.env
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WordPress core (downloaded at install time)
+web/wp-admin/
+web/wp-includes/
+web/wp-*.php
+!web/wp-config.php
+web/index.php
+web/xmlrpc.php
+web/license.txt
+web/readme.html
+
+# WordPress content — only commit what you own
+web/wp-content/uploads/
+web/wp-content/upgrade/
+web/wp-content/cache/
+web/wp-content/languages/
+
+# Default WordPress plugins/themes (not yours)
+web/wp-content/plugins/akismet/
+web/wp-content/plugins/hello.php
+web/wp-content/themes/twenty*/
+
+# Plugin installed via Composer (bind-mounted or symlinked in dev)
+web/wp-content/plugins/wordpress-blocks
+
+# Theme auto-installed by the plugin on activation
+web/wp-content/themes/craft-blocks/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
