@@ -16,10 +16,13 @@ A ready-to-go WordPress project configured with the [WordPress Blocks](https://g
 git clone https://github.com/letsinnovate-io/wordpress-starter.git my-site
 cd my-site
 
-# 2. Configure Composer authentication for private repos
-composer config --global github-oauth.github.com YOUR_GITHUB_PAT
+# 2. Set up Composer authentication for private repos
+#    Copy the auth template and paste the GitHub PAT from
+#    the team's 1Password shared vault (look for "GitHub Composer PAT")
+cp auth.json.example auth.json
+#    Then edit auth.json and replace the placeholder with the token
 
-# 3. Install dependencies
+# 3. Start DDEV and install dependencies
 ddev start
 ddev composer install
 
@@ -27,6 +30,27 @@ ddev composer install
 #    Visit: https://my-wp-blocks-site.ddev.site
 #    Admin: https://my-wp-blocks-site.ddev.site/wp-admin  (admin / admin)
 ```
+
+## Private Repo Authentication
+
+This project depends on private GitHub packages. Composer needs a fine-grained GitHub Personal Access Token to download them.
+
+### Setup
+
+1. Open **1Password** → **Shared Vault** → look for **"GitHub Composer PAT"**
+2. Copy the token value
+3. In your project root:
+   ```bash
+   cp auth.json.example auth.json
+   ```
+4. Open `auth.json` and replace `YOUR_FINE_GRAINED_PAT_HERE` with the token from 1Password
+
+> **Never commit `auth.json`** — it is gitignored. The token in 1Password is a shared fine-grained PAT scoped to the `letsinnovate-io` org repos. If you need to generate a new one, go to [github.com/settings/tokens](https://github.com/settings/tokens?type=beta) and create a fine-grained token with **read access** to:
+> - `letsinnovate-io/block-templates`
+> - `letsinnovate-io/wordpress-blocks`
+> - `letsinnovate-io/staticsite-php-blocks`
+>
+> Then update the token in the 1Password shared vault so the rest of the team has it.
 
 ## What Happens Automatically
 

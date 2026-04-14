@@ -5,6 +5,10 @@
 .env
 !.env.example
 
+# Composer auth (contains GitHub PAT — never commit)
+auth.json
+!auth.json.example
+
 # OS
 .DS_Store
 Thumbs.db
