@@ -13,12 +13,12 @@
     "prefer-stable": true,
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/letsinnovate-io/wordpress-blocks.git"
+            "type": "github",
+            "url": "https://github.com/letsinnovate-io/wordpress-blocks"
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/letsinnovate-io/block-templates.git"
+            "type": "github",
+            "url": "https://github.com/letsinnovate-io/block-templates"
         }
     ],
     "require": {
