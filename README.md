@@ -11,74 +11,74 @@ A ready-to-go WordPress project configured with the [WordPress Blocks](https://g
 
 ## Starting a New Client Site
 
-To create a new project from this starter:
+### 1. One-time setup (only once per machine)
 
-### 1. Create the new repo on GitHub
-
-Go to [github.com/organizations/letsinnovate-io/repositories/new](https://github.com/organizations/letsinnovate-io/repositories/new) and create a new **private** repo for the client (e.g. `acme-website`). Initialize it with a README.
-
-### 2. Clone both repos side by side
+Configure Composer with the GitHub PAT so it can access our private repos. Get the token from **1Password** → **Shared Vault** → **"GitHub Composer PAT"**.
 
 ```bash
-# Clone the new empty repo
-git clone https://github.com/letsinnovate-io/acme-website.git
-cd acme-website
-
-# Copy everything from the starter (except .git)
-# Make sure you're in the new project directory, then:
-rsync -av --exclude='.git' ../wordpress-starter/ .
-
-# Alternatively, if you don't have the starter cloned locally:
-# git clone https://github.com/letsinnovate-io/wordpress-starter.git /tmp/starter
-# rsync -av --exclude='.git' /tmp/starter/ .
-# rm -rf /tmp/starter
+composer config --global github-oauth.github.com PASTE_TOKEN_HERE
 ```
 
-### 3. Customize for the client
+This stores the token in `~/.composer/auth.json` and DDEV passes it through automatically.
+
+### 2. Create the repo and clone it
+
+1. Go to [github.com/organizations/letsinnovate-io/repositories/new](https://github.com/organizations/letsinnovate-io/repositories/new)
+2. Create a new **private** repo (e.g. `acme-website`) — **do not** initialize with a README
+3. Open **Git Tower** → Clone the new repo to your local machine
+4. `cd` into the cloned directory in your terminal
+
+### 3. Scaffold from the starter
 
 ```bash
-# Rename the DDEV project (determines the local URL)
-# Edit .ddev/config.yaml → change "name: my-wp-blocks-site" to "name: acme-website"
+# Configure DDEV for this project
+ddev config --project-type=wordpress --docroot=web --project-name=acme-website
 
-# Rename the Composer package
-# Edit composer.json → change "name" to "letsinnovate-io/acme-website"
-
-# Set up auth and start
-cp auth.json.example auth.json
-# Paste the GitHub PAT from 1Password shared vault (see below)
-
-# Commit everything as the initial commit
-git add -A
-git commit -m "Initial project from wordpress-starter"
-git push
-```
-
-### 4. Start developing
-
-```bash
+# Scaffold the project from the starter (downloads all files + dependencies)
 ddev start
-ddev composer install
-# Visit: https://acme-website.ddev.site
-# Admin: https://acme-website.ddev.site/wp-admin (admin / admin)
+ddev composer create letsinnovate-io/wordpress-starter --stability=dev --no-interaction
 ```
 
-From here, edit the Twig layout templates, add blocks in the WordPress admin, and build the site.
+This pulls the entire starter project into your repo: `composer.json`, `wp-config.php`, `.env.example`, `.ddev/` config, `.gitignore`, and all dependencies.
+
+### 4. Customize
+
+```bash
+# Copy the auth template for this project's future composer installs
+cp auth.json.example auth.json
+# Paste the same GitHub PAT from 1Password into auth.json
+```
+
+Edit these files for the client:
+- **`.ddev/config.yaml`** → `name:` is already set from step 3
+- **`composer.json`** → change `"name"` to `"letsinnovate-io/acme-website"`
+
+### 5. Commit and push
+
+In **Git Tower**: stage all files, commit with message `"Initial project from wordpress-starter"`, push to origin.
+
+### 6. Start building
+
+```
+https://acme-website.ddev.site          ← frontend
+https://acme-website.ddev.site/wp-admin ← admin (admin / admin)
+```
+
+Add blocks in the WordPress editor, edit Twig layouts in `web/wp-content/themes/craft-blocks/twig/layouts/`, and build the site.
 
 ---
 
 ## Quick Start (testing the starter directly)
 
-If you just want to try the starter without creating a new repo:
+If you just want to try the starter without creating a client repo:
 
 ```bash
-git clone https://github.com/letsinnovate-io/wordpress-starter.git my-site
-cd my-site
-cp auth.json.example auth.json
-# Paste the GitHub PAT from 1Password shared vault into auth.json
+mkdir my-test && cd my-test
+ddev config --project-type=wordpress --docroot=web --project-name=my-test
 ddev start
-ddev composer install
-# Visit: https://my-wp-blocks-site.ddev.site
-# Admin: https://my-wp-blocks-site.ddev.site/wp-admin  (admin / admin)
+ddev composer create letsinnovate-io/wordpress-starter --stability=dev --no-interaction
+# Visit: https://my-test.ddev.site
+# Admin: https://my-test.ddev.site/wp-admin (admin / admin)
 ```
 
 ## Private Repo Authentication
