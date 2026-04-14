@@ -23,10 +23,20 @@
     ],
     "require": {
         "php": "^8.2",
+        "composer/installers": "^2.0",
         "vlucas/phpdotenv": "^5.6",
         "letsinnovate-io/wordpress-blocks": "dev-main"
     },
+    "extra": {
+        "installer-paths": {
+            "web/wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+            "web/wp-content/themes/{$name}/": ["type:wordpress-theme"]
+        }
+    },
     "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        },
         "sort-packages": true,
         "optimize-autoloader": true
     },
