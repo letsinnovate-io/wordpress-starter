@@ -16,3 +16,5 @@ hooks:
         - exec: "test -f /var/www/html/web/wp-includes/version.php || wp core download --path=/var/www/html/web"
         - exec: "wp core is-installed --path=/var/www/html/web 2>/dev/null || wp core install --path=/var/www/html/web --url=${DDEV_PRIMARY_URL} --title='My Site' --admin_user=admin --admin_password=admin --admin_email=dev@example.com --skip-email"
         - exec: "wp plugin is-active wordpress-blocks --path=/var/www/html/web 2>/dev/null || wp plugin activate wordpress-blocks --path=/var/www/html/web 2>/dev/null || true"
+        - exec: "wp theme is-installed craft-blocks --path=/var/www/html/web 2>/dev/null || wp eval --path=/var/www/html/web 'LetsinnovateIo\\WordpressBlocks\\ThemeInstaller::install();' 2>/dev/null || true"
+        - exec: "wp theme is-active craft-blocks --path=/var/www/html/web 2>/dev/null || wp theme activate craft-blocks --path=/var/www/html/web 2>/dev/null || true"
