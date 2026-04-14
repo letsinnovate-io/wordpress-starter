@@ -9,26 +9,76 @@ A ready-to-go WordPress project configured with the [WordPress Blocks](https://g
 - [DDEV](https://ddev.readthedocs.io/) (for local development)
 - A [GitHub Personal Access Token](https://github.com/settings/tokens) with access to the private repos
 
-## Quick Start (DDEV)
+## Starting a New Client Site
+
+To create a new project from this starter:
+
+### 1. Create the new repo on GitHub
+
+Go to [github.com/organizations/letsinnovate-io/repositories/new](https://github.com/organizations/letsinnovate-io/repositories/new) and create a new **private** repo for the client (e.g. `acme-website`). Initialize it with a README.
+
+### 2. Clone both repos side by side
 
 ```bash
-# 1. Clone this repo
-git clone https://github.com/letsinnovate-io/wordpress-starter.git my-site
-cd my-site
+# Clone the new empty repo
+git clone https://github.com/letsinnovate-io/acme-website.git
+cd acme-website
 
-# 2. Set up Composer authentication for private repos
-#    Copy the auth template and paste the GitHub PAT from
-#    the team's 1Password shared vault (look for "GitHub Composer PAT")
+# Copy everything from the starter (except .git)
+# Make sure you're in the new project directory, then:
+rsync -av --exclude='.git' ../wordpress-starter/ .
+
+# Alternatively, if you don't have the starter cloned locally:
+# git clone https://github.com/letsinnovate-io/wordpress-starter.git /tmp/starter
+# rsync -av --exclude='.git' /tmp/starter/ .
+# rm -rf /tmp/starter
+```
+
+### 3. Customize for the client
+
+```bash
+# Rename the DDEV project (determines the local URL)
+# Edit .ddev/config.yaml → change "name: my-wp-blocks-site" to "name: acme-website"
+
+# Rename the Composer package
+# Edit composer.json → change "name" to "letsinnovate-io/acme-website"
+
+# Set up auth and start
 cp auth.json.example auth.json
-#    Then edit auth.json and replace the placeholder with the token
+# Paste the GitHub PAT from 1Password shared vault (see below)
 
-# 3. Start DDEV and install dependencies
+# Commit everything as the initial commit
+git add -A
+git commit -m "Initial project from wordpress-starter"
+git push
+```
+
+### 4. Start developing
+
+```bash
 ddev start
 ddev composer install
+# Visit: https://acme-website.ddev.site
+# Admin: https://acme-website.ddev.site/wp-admin (admin / admin)
+```
 
-# 4. That's it — DDEV auto-installs WordPress + activates the plugin
-#    Visit: https://my-wp-blocks-site.ddev.site
-#    Admin: https://my-wp-blocks-site.ddev.site/wp-admin  (admin / admin)
+From here, edit the Twig layout templates, add blocks in the WordPress admin, and build the site.
+
+---
+
+## Quick Start (testing the starter directly)
+
+If you just want to try the starter without creating a new repo:
+
+```bash
+git clone https://github.com/letsinnovate-io/wordpress-starter.git my-site
+cd my-site
+cp auth.json.example auth.json
+# Paste the GitHub PAT from 1Password shared vault into auth.json
+ddev start
+ddev composer install
+# Visit: https://my-wp-blocks-site.ddev.site
+# Admin: https://my-wp-blocks-site.ddev.site/wp-admin  (admin / admin)
 ```
 
 ## Private Repo Authentication
